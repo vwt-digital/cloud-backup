@@ -61,8 +61,9 @@ def get_project_name_from_git_url(url):
 
 def dump_repo(repo_url):
 
-    tmp_path = '/tmp/' + get_project_name_from_git_url(repo_url)
-    tar_name = tmp_path + ".tar.bz2"
+    tmp_path = '/tmp/new_dir/'
+    repo_path = tmp_path + get_project_name_from_git_url(repo_url)
+    tar_name = repo_path + ".tar.bz2"
 
     now = datetime.datetime.utcnow()
     destinationpath = '%s/%d/%d/%d/%s' % (config.BASE_PATH,
@@ -71,10 +72,10 @@ def dump_repo(repo_url):
                                           now.day,
                                           get_project_name_from_git_url(repo_url))
 
-    git.Repo.clone_from(repo_url, tmp_path, mirror=True)
+    git.Repo.clone_from(repo_url, repo_path, mirror=True)
 
     tar = tarfile.open(tar_name, "w:bz2")
-    tar.add(tmp_path, arcname=get_project_name_from_git_url(repo_url))
+    tar.add(repo_path, arcname=get_project_name_from_git_url(repo_url))
     tar.close()
 
     upload_blob(config.GOOGLE_STORAGE_BUCKET, tar_name, destinationpath)
