@@ -29,7 +29,7 @@ def receive_pubsub_backup_trigger_func(data, context):
 
         git_list = get_list_of_gits(pubsub_message)
         for github in git_list:
-            dump_repo(github)
+            dump_repo(github, '/tmp/new_dir/')
 
 
 def upload_blob(bucket_name, source_file_name, destination_blob_name):
@@ -59,10 +59,9 @@ def get_project_name_from_git_url(url):
     return url.split("/")[-1]
 
 
-def dump_repo(repo_url):
+def dump_repo(repo_url, temp_location):
 
-    tmp_path = '/tmp/new_dir/'
-    repo_path = tmp_path + get_project_name_from_git_url(repo_url)
+    repo_path = temp_location + get_project_name_from_git_url(repo_url)
     tar_name = repo_path + ".tar.bz2"
 
     now = datetime.datetime.utcnow()
@@ -78,6 +77,9 @@ def dump_repo(repo_url):
     tar.add(repo_path, arcname=get_project_name_from_git_url(repo_url))
     tar.close()
 
-    upload_blob(config.GOOGLE_STORAGE_BUCKET, tar_name, destinationpath)
+    try:
+        upload_blob(config.GOOGLE_STORAGE_BUCKET, tar_name, destinationpath)
+    finally:
+        shutil.rmtree(temp_location)
 
-    shutil.rmtree(tmp_path)
+    return destinationpath
