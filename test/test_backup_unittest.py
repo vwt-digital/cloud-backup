@@ -6,8 +6,6 @@ import os
 import shutil
 
 def fake_upload_blob(bucket_name, source_file_name, destination_blob_name):
-    print(source_file_name)
-    print(destination_blob_name)
     os.makedirs(destination_blob_name)
     shutil.copy(source_file_name, destination_blob_name)
 
