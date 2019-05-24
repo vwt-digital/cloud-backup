@@ -13,7 +13,6 @@ import config
 from google.cloud import storage
 
 
-
 def receive_pubsub_backup_trigger_func(data, context):
     """Triggered from a message on a Cloud Pub/Sub topic.
     Args:
@@ -34,8 +33,9 @@ def receive_pubsub_backup_trigger_func(data, context):
 
 def upload_blob(bucket_name, source_file_name, destination_blob_name):
     """Uploads a file to the bucket."""
-    storage_client = storage.Client()
-    bucket = storage_client.get_bucket(bucket_name)
+    storage_client = storage.Client(project=config.BACKUP_PROJECT)
+    bucket = storage_client.create_bucket(bucket_name)
+    # bucket = storage_client.get_bucket(bucket_name)
     blob = bucket.blob(destination_blob_name)
 
     blob.upload_from_filename(source_file_name)
@@ -44,7 +44,7 @@ def upload_blob(bucket_name, source_file_name, destination_blob_name):
 
 
 def get_list_of_gits(json_file):
-    catalog = json.load(json_file)
+    catalog = json.load(open(json_file, 'r'))
 
     download_urls = []
     for entry in catalog['dataset']:
@@ -60,16 +60,17 @@ def get_project_name_from_git_url(url):
 
 
 def dump_repo(repo_url, temp_location):
-
     repo_path = temp_location + get_project_name_from_git_url(repo_url)
     tar_name = repo_path + ".tar.bz2"
 
     now = datetime.datetime.utcnow()
-    destinationpath = '%s/%d/%d/%d/%s' % (config.BASE_PATH,
-                                          now.year,
-                                          now.month,
-                                          now.day,
-                                          get_project_name_from_git_url(repo_url))
+    destinationpath = '%s/%d/%d/%d/%s/%s%s' % (config.BASE_PATH,
+                                               now.year,
+                                               now.month,
+                                               now.day,
+                                               "git",
+                                               get_project_name_from_git_url(repo_url),
+                                               ".tar.bz2")
 
     git.Repo.clone_from(repo_url, repo_path, mirror=True)
 
