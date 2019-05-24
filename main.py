@@ -27,7 +27,7 @@ def receive_pubsub_backup_trigger_func(data, context):
         pubsub_message = base64.b64decode(data['data']).decode('utf-8')
         logging.info('Python Pub/Sub receive_pubsub_backup_trigger_func function received message %s.', pubsub_message)
 
-        git_list = get_list_of_gits(pubsub_message)
+        git_list = get_list_of_gits(config.DATA_CATALOG)
         for github in git_list:
             dump_repo(github, '/tmp/new_dir/')
 
@@ -43,8 +43,8 @@ def upload_blob(bucket_name, source_file_name, destination_blob_name):
     logging.info('File {} uploaded to {}.'.format(source_file_name, destination_blob_name))
 
 
-def get_list_of_gits(json_string):
-    catalog = json.loads(json_string)
+def get_list_of_gits(json_file):
+    catalog = json.load(json_file)
 
     download_urls = []
     for entry in catalog['dataset']:
