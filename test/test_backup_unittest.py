@@ -5,9 +5,14 @@ import mock
 import os
 import shutil
 
+
 def fake_upload_blob(bucket_name, source_file_name, destination_blob_name):
     os.makedirs(destination_blob_name)
     shutil.copy(source_file_name, destination_blob_name)
+
+
+def get_fake_access_token():
+    return test_config.TESTING_TOKEN
 
 
 class TestMain(unittest.TestCase):
@@ -27,8 +32,9 @@ class TestMain(unittest.TestCase):
         self.assertEqual(expected_project_name, project_name,
                          "The method should take the last part of the url {}".format(git_url))
 
+    @mock.patch('main.get_access_token', side_effect=get_fake_access_token)
     @mock.patch('main.upload_blob', side_effect=fake_upload_blob)
-    def test_dump_repo(self, upload_blob_function):
+    def test_dump_repo(self, upload_blob_function, access_token_function):
         git_url = "https://github.com/vwt-digital/restingest.git"
         temp_location = '/tmp/new_dir/'
         file_location = main.dump_repo(git_url, temp_location)
@@ -37,6 +43,7 @@ class TestMain(unittest.TestCase):
 
         file_exists = os.path.isfile(file_name)
         temp_exists = os.path.isdir(temp_location)
+
         try:
             self.assertTrue(file_exists, "Method should create a file in {}.".format(file_location))
             self.assertFalse(temp_exists, "Method should clean up after itself. If path {} exists, it has not been cleaned".format(temp_location))
