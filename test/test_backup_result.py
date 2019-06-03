@@ -69,16 +69,20 @@ def test_backup_success(bucket, file, location):
             tar.extractall(path=bare_repo_dir)
             tar.close()
 
-            git_directory = base_tar_name[:-len(".tar.bz2")]
-            bare_repo_dir = '%s%s' % (bare_repo_dir, git_directory)
-
             try:
-                cloned_repo = git.Repo.clone_from(bare_repo_dir, reconstructed_repo_dir)
-            except git.exc.GitError:
-                logging.error(RuntimeError("BACKUP FAILURE: Git {} could not be reconstructed.".format(file)))
+                git_directory = base_tar_name[:-len(".tar.bz2")]
+                bare_repo_dir = '%s%s' % (bare_repo_dir, git_directory)
 
-            file_string = ", ".join(os.listdir(cloned_repo.working_tree_dir))
+                try:
+                    cloned_repo = git.Repo.clone_from(bare_repo_dir, reconstructed_repo_dir)
 
-            logging.info('Found the following files and directories at root level: {}'.format(file_string))
+                    file_string = ", ".join(os.listdir(cloned_repo.working_tree_dir))
+
+                    logging.info('Found the following files and directories at root level: {}'.format(file_string))
+                except git.exc.GitError:
+                    logging.error(RuntimeError("BACKUP FAILURE: Git {} could not be reconstructed.".format(file)))
+            except tarfile.ReadError:
+                logging.error(RuntimeError("BACKUP FAILURE: File {} is not a valid tar-file".format(file)))
+
     finally:
         shutil.rmtree(temp_location)
