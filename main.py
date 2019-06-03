@@ -24,6 +24,7 @@ def receive_pubsub_backup_trigger_func(data, context):
 
     logging.basicConfig(level=logging.info)
 
+
     if 'data' in data:
         pubsub_message = base64.b64decode(data['data']).decode('utf-8')
         logging.info('Python Pub/Sub receive_pubsub_backup_trigger_func function received message %s.', pubsub_message)
@@ -42,7 +43,7 @@ def receive_pubsub_backup_trigger_func(data, context):
 
 def upload_blob(bucket_name, source_file_name, destination_blob_name):
     """Uploads a file to the bucket."""
-    storage_client = storage.Client(project=config.BACKUP_PROJECT)
+    storage_client = storage.Client()
     bucket = storage_client.get_bucket(bucket_name)
     blob = bucket.blob(destination_blob_name)
 
