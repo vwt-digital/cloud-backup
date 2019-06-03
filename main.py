@@ -7,13 +7,12 @@ import shutil
 import tarfile
 
 import git
-
 import os
-from google.cloud import kms_v1
 
 import config
 
 from google.cloud import storage
+from google.cloud import kms_v1
 
 
 def receive_pubsub_backup_trigger_func(data, context):
@@ -32,6 +31,13 @@ def receive_pubsub_backup_trigger_func(data, context):
         git_list = get_list_of_gits(config.DATA_CATALOG)
         for github in git_list:
             dump_repo(github, '/tmp/new_dir/')
+        now = datetime.datetime.utcnow()
+        destination_path = '%s/%d/%d/%d/%s' % (config.BASE_PATH,
+                                               now.year,
+                                               now.month,
+                                               now.day,
+                                               config.DATA_CATALOG)
+        upload_blob(config.GOOGLE_STORAGE_BUCKET, config.DATA_CATALOG, destination_path)
 
 
 def upload_blob(bucket_name, source_file_name, destination_blob_name):
@@ -68,13 +74,12 @@ def dump_repo(repo_url, temp_location):
     tar_name = temp_repo_path + ".tar.bz2"
 
     now = datetime.datetime.utcnow()
-    destinationpath = '%s/%d/%d/%d/%s/%s%s' % (config.BASE_PATH,
-                                               now.year,
-                                               now.month,
-                                               now.day,
-                                               "git",
-                                               get_project_name_from_git_url(repo_url),
-                                               ".tar.bz2")
+    destinationpath = '%s/%d/%d/%d/%s%s' % (config.BASE_PATH,
+                                            now.year,
+                                            now.month,
+                                            now.day,
+                                            get_project_name_from_git_url(repo_url),
+                                            ".tar.bz2")
 
     github_access_token = get_access_token()
 
@@ -105,4 +110,3 @@ def get_access_token():
                                                       'github-access-token')
     decrypt_response = kms_client.decrypt(crypto_key_name, github_access_token_encrypted)
     return decrypt_response.plaintext.decode("utf-8").replace('\n', '')
-
