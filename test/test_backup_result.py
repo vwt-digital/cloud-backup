@@ -46,7 +46,7 @@ def test_backup_success(bucket, file, temp_location):
 
         base_tar_name = file.split("/")[-1]
 
-        tar_location = '%s/%s' % (tar_dir, base_tar_name)
+        tar_location = '%s%s' % (tar_dir, base_tar_name)
 
         download_blob(bucket, file, tar_location)
         if tar_location.endswith(".tar.bz2"):
@@ -55,8 +55,8 @@ def test_backup_success(bucket, file, temp_location):
             tar.extractall(path=bare_repo_dir)
             tar.close()
 
-            git_directory = base_tar_name.split(".")[0] + ".git"
-            bare_repo_dir = '%s/%s' % (bare_repo_dir, git_directory)
+            git_directory = base_tar_name[:-len(".tar.bz2")]
+            bare_repo_dir = '%s%s' % (bare_repo_dir, git_directory)
 
             cloned_repo = git.Repo.clone_from(bare_repo_dir, reconstructed_repo_dir)
 
