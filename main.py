@@ -32,7 +32,7 @@ def receive_pubsub_backup_trigger_func(data, context):
         for github in git_list:
             dump_repo(github, '/tmp/new_dir/')
         now = datetime.datetime.utcnow()
-        destination_path = '%s/%d/%d/%d/%s' % (config.BASE_PATH,
+        destination_path = '%s/%d/%d/%d/%s' % (config.GIT_BACKUP_BASE_PATH,
                                                now.year,
                                                now.month,
                                                now.day,
@@ -74,7 +74,7 @@ def dump_repo(repo_url, temp_location):
     tar_name = temp_repo_path + ".tar.bz2"
 
     now = datetime.datetime.utcnow()
-    destinationpath = '%s/%d/%d/%d/%s%s' % (config.BASE_PATH,
+    destinationpath = '%s/%d/%d/%d/%s%s' % (config.GIT_BACKUP_BASE_PATH,
                                             now.year,
                                             now.month,
                                             now.day,
