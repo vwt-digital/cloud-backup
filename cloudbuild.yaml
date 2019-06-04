@@ -1,0 +1,12 @@
+
+- name: 'gcr.io/cloud-builders/gcloud'
+  entrypoint: 'bash'
+  args:
+  - '-c'
+  - |
+    for pr in $(python3 scripts/listprojects.py config/projects.json)
+    do
+      python3 permissions/generate_permission_file.py ${pr}
+      gsutil mb -p ${pr} on gs://${PROJECT_ID}-${pr}-backup-stg/
+      gcloud projects set-iam-policy ${PROJECT_ID} permissions/${pr}.json
+    done
