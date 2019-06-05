@@ -1,0 +1,1 @@
+{"policy": {"bindings": [{"role": "roles/storage.legacyBucketWriter", "members": ["serviceAccount: vwt-d-gew1-dat-deployment@appspot.gserviceaccount.com"]}], "etag": "b'VGVzdA=='"}}

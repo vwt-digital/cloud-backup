@@ -1,11 +1,14 @@
+import base64
 import sys
 import json
 
 if len(sys.argv) > 1:
     project_name = sys.argv[1]
-    data = {"bindings": []}
+    etag = base64.b64encode(project_name.encode('utf-8'))
 
-    data["bindings"].append({
+    data = {"policy": {"bindings": [], "etag": str(etag)}}
+
+    data["policy"]["bindings"].append({
         "role": "roles/storage.legacyBucketWriter",
         "members": ["serviceAccount: {}@appspot.gserviceaccount.com".format(project_name)]
     })
