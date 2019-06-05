@@ -16,4 +16,5 @@ steps:
   - '--runtime=python37'
   - '--trigger-resource=${_BUCKET_NAME}'
   - '--trigger-event=google.storage.object.finalize'
+  - '--set-env-vars=PROJECT_ID=${PROJECT_ID},BACKUP_PROJECT_ID=${PROJECT_ID}'
   - '--region=europe-west1'
