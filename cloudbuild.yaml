@@ -26,7 +26,7 @@ steps:
   - |
     for pr in $(python3 ../scripts/listprojects.py ../config/projects.json)
     do
-      gcloud builds submit --substitutions=_BUCKET_NAME="{PROJECT_ID}-${pr}-backup-stg" .
+      gcloud builds submit --substitutions=_BUCKET_NAME="${PROJECT_ID}-${pr}-backup-stg" .
     done
   dir: 'test_git_backup'
 
