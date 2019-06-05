@@ -1,5 +1,13 @@
 steps:
 - name: 'gcr.io/cloud-builders/gcloud'
+  args:
+    - 'services'
+    - 'enable'
+    - 'cloudbuild.googleapis.com'
+    - 'deploymentmanager.googleapis.com'
+    - 'cloudfunctions.googleapis.com'
+
+- name: 'gcr.io/cloud-builders/gcloud'
   entrypoint: 'bash'
   args:
   - '-c'
@@ -10,3 +18,16 @@ steps:
       gsutil mb -p ${pr} on gs://${PROJECT_ID}-${pr}-backup-stg/
       gcloud projects set-iam-policy ${PROJECT_ID} permissions/${pr}.json
     done
+
+- name: 'gcr.io/cloud-builders/gcloud'
+  entrypoint: 'bash'
+  args:
+  - '-c'
+  - |
+    for pr in $(python3 scripts/listprojects.py config/projects.json)
+    do
+      gcloud builds submit --substitutions=_BUCKET_NAME="{PROJECT_ID}-${pr}-backup-stg" .
+    done
+  dir: 'test_git_backup'
+
+

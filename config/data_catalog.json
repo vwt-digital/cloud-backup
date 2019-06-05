@@ -1,0 +1,96 @@
+{
+  "conformsTo": "https://vwt-digital.github.io/project-company-data.github.io/v1.1/schema",
+  "dataset": [
+    {
+      "identifier": "my-deployment-status-stg",
+      "title": "Status overview of my deployments",
+      "accessLevel": "public",
+      "rights": "The dataset shows the deployment status of applications, which should be available for all users",
+      "contactPoint": {
+        "fn": "My Name",
+        "hasEmail": "mailto:my@e.mail"
+      },
+      "publisher": {
+        "name": "My Team",
+        "subOrganizationOf": {
+          "name": "My Company"
+        }
+      },
+      "keyword": [],
+      "modified": "R/PT1M",
+      "spatial": "Netherlands",
+      "temporal": "P1M",
+      "accrualPeriodicity": "R/PT1M",
+      "issued": "2019-05",
+      "distribution": [
+        {
+          "accessURL": "https://console.cloud.google.com/storage/browser/my-deployment-status-stg",
+          "mediaType": "application/json",
+	  "deploymentZone": "europe-west1",
+          "format": "blob-storage",
+          "title": "my-deployment-status-stg",
+          "description": "My environment at Google europe-west1 containing deployment status blob storage"
+        }
+      ]
+    },
+    {
+      "identifier": "my-cloud-builds-topic",
+      "title": "Status of cloud builds on my environment.",
+      "accessLevel": "internal",
+      "rights": "The dataset shows the status of builds on my environment, it does not contain PII, so no further restrictions required",
+      "contactPoint": {
+        "fn": "My Name",
+        "hasEmail": "mailto:my@e.mail"
+      },
+      "publisher": {
+        "name": "My Team",
+        "subOrganizationOf": {
+          "name": "My Company"
+        }
+      },
+      "keyword": [],
+      "modified": "R/PT1M",
+      "spatial": "Netherlands",
+      "temporal": "P1M",
+      "accrualPeriodicity": "R/PT1M",
+      "issued": "2019-05",
+      "distribution": [
+        {
+          "accessURL": "https://console.cloud.google.com/cloudpubsub/topics/my-cloud-builds-topic",
+          "mediaType": "application/json",
+          "format": "topic",
+          "title": "my-cloud-builds-topic",
+          "description": "My development environment at Google europe-west1 containing cloud build status topic"
+        }
+      ]
+    },
+    {
+      "identifier": "vwt/dat/repo/cloud-deployment",
+      "title": "Source of cloud deployment",
+      "accessLevel": "public",
+      "rights": "The dataset shows information on the source repositories, it does not contain PII, so no further restrictions required",
+      "contactPoint": {
+        "fn": "Eric van der Velde",
+        "hasEmail": "mailto:e.vandervelde@vwt.digital"
+      },
+      "publisher": {
+        "name": "Digital Ambition Team",
+        "subOrganizationOf": {
+          "name": "VokerWessels Telecom"
+        }
+      },
+      "keyword": [],
+      "issued": "2019-05",
+      "distribution": [
+        {
+          "accessURL": "https://github.com/vwt-digital/cloud-deployment",
+	  "downloadURL": "https://github.com/vwt-digital/cloud-deployment.git",
+          "format": "gitrepo",
+          "title": "vwt-digital/cloud-deployment",
+          "description": "GitHub repository containing cloud-deployment code"
+        }
+      ]
+    }
+  ]
+}
+

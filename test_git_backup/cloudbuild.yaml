@@ -1,0 +1,10 @@
+- name: 'gcr.io/cloud-builders/gcloud'
+  args:
+  - 'functions'
+  - 'deploy'
+  - '${_BUCKET_NAME}-test-func'
+  - '--entry-point=git_data_cloud_backup_testing_func'
+  - '--runtime=python37'
+  - '--trigger-resource ${_BUCKET_NAME}'
+  - '--trigger-event google.storage.object.finalize'
+  - '--region=europe-west1'
