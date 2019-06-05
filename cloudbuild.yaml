@@ -24,7 +24,7 @@ steps:
   args:
   - '-c'
   - |
-    for pr in $(python3 scripts/listprojects.py config/projects.json)
+    for pr in $(python3 ../scripts/listprojects.py ../config/projects.json)
     do
       gcloud builds submit --substitutions=_BUCKET_NAME="{PROJECT_ID}-${pr}-backup-stg" .
     done
