@@ -16,7 +16,7 @@ steps:
     for pr in $(python3 scripts/listprojects.py config/projects.json)
     do
       python3 permissions/generate_permission_file.py ${pr}
-      gsutil mb -p ${pr} gs://${PROJECT_ID}-${pr}-backup-stg/
+      gsutil mb gs://${PROJECT_ID}-${pr}-backup-stg/
       gcloud projects set-iam-policy ${PROJECT_ID} config/${pr}.json
     done
 
