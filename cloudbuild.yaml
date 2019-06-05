@@ -24,8 +24,8 @@ steps:
   args:
   - '-c'
   - |
-    cp config.py test_git_backup/config.py
-    cp requirements.txt test_git_backup/requirements.txt
+    cp ../config.py config.py
+    cp ../requirements.txt requirements.txt
     for pr in $(python3 ../scripts/listprojects.py ../config/projects.json)
     do
       gcloud builds submit --substitutions=_BUCKET_NAME="${PROJECT_ID}-${pr}-backup-stg",_PROJECT_NAME=${pr} .
