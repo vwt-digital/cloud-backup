@@ -10,7 +10,7 @@ import config
 from google.cloud import storage
 
 
-def test_backup_func(data, context):
+def git_data_cloud_backup_testing_func(data, context):
     """Triggered by a change to a Cloud Storage bucket.
     Args:
          event (dict): Event payload.
