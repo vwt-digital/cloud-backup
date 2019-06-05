@@ -16,7 +16,7 @@ steps:
     do
       python3 permissions/generate_permission_file.py ${pr}
       gsutil mb -p ${pr} on gs://${PROJECT_ID}-${pr}-backup-stg/
-      gcloud projects set-iam-policy ${PROJECT_ID} permissions/${pr}.json
+      gcloud projects set-iam-policy ${PROJECT_ID} config/${pr}.json
     done
 
 - name: 'gcr.io/cloud-builders/gcloud'

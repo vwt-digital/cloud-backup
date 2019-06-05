@@ -10,5 +10,5 @@ if len(sys.argv) > 1:
         "members": ["serviceAccount: {}@appspot.gserviceaccount.com".format(project_name)]
     })
 
-    with open("{}.json".format(project_name), 'w') as output:
+    with open("config/{}.json".format(project_name), 'w') as output:
         json.dump(data, output)
