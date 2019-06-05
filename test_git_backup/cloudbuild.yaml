@@ -1,6 +1,14 @@
 steps:
 - name: 'gcr.io/cloud-builders/gcloud'
   args:
+    - 'services'
+    - 'enable'
+    - 'cloudbuild.googleapis.com'
+    - 'deploymentmanager.googleapis.com'
+    - 'cloudfunctions.googleapis.com'
+
+- name: 'gcr.io/cloud-builders/gcloud'
+  args:
   - 'functions'
   - 'deploy'
   - '${_BUCKET_NAME}-test-func'
