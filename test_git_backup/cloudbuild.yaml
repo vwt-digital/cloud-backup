@@ -14,6 +14,6 @@ steps:
   - '${_PROJECT_NAME}-backup-test-func'
   - '--entry-point=git_data_cloud_backup_testing_func'
   - '--runtime=python37'
-  - '--trigger-bucket=${_BUCKET_NAME}'
+  - '--trigger-resource=${_BUCKET_NAME}'
   - '--trigger-event=google.storage.object.finalize'
   - '--region=europe-west1'
