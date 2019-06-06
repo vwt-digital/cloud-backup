@@ -36,17 +36,14 @@ class TestMain(unittest.TestCase):
     @mock.patch('main.upload_blob', side_effect=fake_upload_blob)
     def test_dump_repo(self, upload_blob_function, access_token_function):
         git_url = "https://github.com/vwt-digital/restingest.git"
-        temp_location = '/tmp/new_dir/'
         file_location = main.dump_repo(git_url)
         file_name = "%s/%s.tar.bz2" % (file_location,
                                        main.get_project_name_from_git_url(git_url))
 
         file_exists = os.path.isfile(file_name)
-        temp_exists = os.path.isdir(temp_location)
 
         try:
             self.assertTrue(file_exists, "Method should create a file in {}.".format(file_location))
-            self.assertFalse(temp_exists, "Method should clean up after itself. If path {} exists, it has not been cleaned".format(temp_location))
         finally:
             shutil.rmtree(file_location.split("/")[0])
             file_exists = os.path.isfile(file_name)
