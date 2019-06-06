@@ -6,6 +6,7 @@ import git
 import os
 
 import config
+import tempfile
 
 from google.cloud import storage
 
@@ -13,14 +14,14 @@ from google.cloud import storage
 def git_data_cloud_backup_testing_func(data, context):
     """Triggered by a change to a Cloud Storage bucket.
     Args:
-         event (dict): Event payload.
+         data (dict): Event payload.
          context (google.cloud.functions.Context): Metadata for the event.
     """
     bucket = data['bucket']
-    file = data['name']
+    file_name = data['name']
     logging.basicConfig(level=logging.info)
-    if file.startswith(config.GIT_BACKUP_BASE_PATH):
-        test_backup_success(bucket, file, "/tmp")
+    if file_name.startswith(config.GIT_BACKUP_BASE_PATH):
+        test_backup_success(bucket, file_name)
 
 
 def download_blob(bucket_name, source_blob_name, destination_file_name):
@@ -40,29 +41,18 @@ def get_temp_dir(temp_dir_location, dir_name):
     return temp_dir
 
 
-def get_new_dir(base_dir):
-    new_dir = "{}/{}".format(base_dir, 'temporary_dir')
-    if not os.path.isdir(new_dir):
-        return new_dir
-    else:
-        for i in range(100):
-            new_path = "{}{}".format(new_dir, i)
-            if not os.path.isdir(new_path):
-                return new_path
-
-
-def test_backup_success(bucket, file, location):
-    temp_location = get_new_dir(location)
+def test_backup_success(bucket, file_name):
+    temp_location = os.path.join(tempfile.mkdtemp())
     try:
         tar_dir = get_temp_dir(temp_location, 'tar')
         bare_repo_dir = get_temp_dir(temp_location, 'repo')
         reconstructed_repo_dir = get_temp_dir(temp_location, 'work')
 
-        base_tar_name = file.split("/")[-1]
+        base_tar_name = file_name.split("/")[-1]
 
         tar_location = '%s%s' % (tar_dir, base_tar_name)
 
-        download_blob(bucket, file, tar_location)
+        download_blob(bucket, file_name, tar_location)
         if not tar_location.endswith("data_catalog.json"):
 
             tar = tarfile.open(tar_location, "r:bz2")
@@ -80,9 +70,9 @@ def test_backup_success(bucket, file, location):
 
                     logging.info('Found the following files and directories at root level: {}'.format(file_string))
                 except git.exc.GitError:
-                    logging.error(RuntimeError("BACKUP FAILURE: Git {} could not be reconstructed.".format(file)))
+                    logging.error(RuntimeError("BACKUP FAILURE: Git {} could not be reconstructed.".format(file_name)))
             except tarfile.ReadError:
-                logging.error(RuntimeError("BACKUP FAILURE: File {} is not a valid tar-file".format(file)))
+                logging.error(RuntimeError("BACKUP FAILURE: File {} is not a valid tar-file".format(file_name)))
 
     finally:
         shutil.rmtree(temp_location)

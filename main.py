@@ -8,6 +8,7 @@ import tarfile
 
 import git
 import os
+import tempfile
 
 import config
 
@@ -18,12 +19,11 @@ from google.cloud import kms_v1
 def receive_pubsub_backup_trigger_func(data, context):
     """Triggered from a message on a Cloud Pub/Sub topic.
     Args:
-         message (dict): Event payload.
+         data (dict): Event payload.
          context (google.cloud.functions.Context): Metadata for the event.
     """
 
     logging.basicConfig(level=logging.info)
-
 
     if 'data' in data:
         pubsub_message = base64.b64decode(data['data']).decode('utf-8')
@@ -31,7 +31,7 @@ def receive_pubsub_backup_trigger_func(data, context):
 
         git_list = get_list_of_gits(config.DATA_CATALOG)
         for github in git_list:
-            dump_repo(github, '/tmp/new_dir/')
+            dump_repo(github)
         now = datetime.datetime.utcnow()
         destination_path = '%s/%d/%d/%d/%s' % (config.GIT_BACKUP_BASE_PATH,
                                                now.year,
@@ -70,8 +70,9 @@ def get_project_name_from_git_url(url):
     return url.split("/")[-1]
 
 
-def dump_repo(repo_url, temp_location):
-    temp_repo_path = temp_location + get_project_name_from_git_url(repo_url)
+def dump_repo(repo_url):
+    tmpdir = tempfile.mkdtemp()
+    temp_repo_path = os.path.join(tmpdir, get_project_name_from_git_url(repo_url))
     tar_name = temp_repo_path + ".tar.bz2"
 
     now = datetime.datetime.utcnow()
@@ -99,7 +100,7 @@ def dump_repo(repo_url, temp_location):
     try:
         upload_blob(config.GOOGLE_STORAGE_BUCKET, tar_name, destinationpath)
     finally:
-        shutil.rmtree(temp_location)
+        shutil.rmtree(tmpdir)
 
     return destinationpath
 
