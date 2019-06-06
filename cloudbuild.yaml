@@ -1,13 +1,5 @@
 timeout: 1800s
 steps:
-- name: 'gcr.io/cloud-builders/gcloud'
-  args:
-    - 'services'
-    - 'enable'
-    - 'cloudbuild.googleapis.com'
-    - 'deploymentmanager.googleapis.com'
-    - 'cloudfunctions.googleapis.com'
-    - 'cloudresourcemanager.googleapis.com'
 
 - name: 'gcr.io/cloud-builders/gcloud'
   entrypoint: 'bash'
