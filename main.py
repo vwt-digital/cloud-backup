@@ -106,7 +106,7 @@ def dump_repo(repo_url):
 
 
 def get_access_token():
-    github_access_token_encrypted = base64.b64decode(os.environ['GITHUB_ACCESS_TOKEN_ENCRYPTED'])
+    github_access_token_encrypted = open(config.GITHUB_ACCESS_TOKEN_ENCRYPTED, "rb").read()
     kms_client = kms_v1.KeyManagementServiceClient()
     crypto_key_name = kms_client.crypto_key_path_path(os.environ['PROJECT_ID'], 'europe-west1', 'github',
                                                       'github-access-token')
