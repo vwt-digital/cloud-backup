@@ -1,0 +1,12 @@
+steps:
+- name: 'gcr.io/cloud-builders/gcloud'
+  args:
+  - 'functions'
+  - 'deploy'
+  - 'backup-pubsub-relay-func'
+  - '--entry-point=relay_pubsub_backup_trigger_func'
+  - '--runtime=python37'
+  - '--trigger-topic=${_TOPIC_NAME}'
+  - '--set-env-vars=TARGET_PROJECT_ID=${_TARGET_PROJECT_ID},TOPIC_NAME=${_TOPIC_NAME}'
+  - '--region=europe-west1'
+  - '--timeout=120'
