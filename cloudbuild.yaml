@@ -19,13 +19,6 @@ steps:
     gcloud builds submit --substitutions=_TARGET_PROJECT_ID=${_PROJECT_SOURCE},_TOPIC_NAME=${_TOPIC_NAME} .
   dir: 'functions/pub_sub_relay'
 
-#- name: 'gcr.io/cloud-builders/gcloud'
-#  entrypoint: 'bash'
-#  args:
-#  - '-c'
-#  - |
-#    gcloud scheduler jobs create pubsub automated_back_up_job --schedule "0 4 * * *" --topic ${_TOPIC_NAME} --message-body "{ "backup": "test"}"
-
 - name: 'gcr.io/cloud-builders/gcloud'
   args:
   - 'scheduler'
@@ -37,15 +30,14 @@ steps:
   - '--topic=${_TOPIC_NAME}'
   - '--message-body={ "data": "test"}'
 
-
 - name: 'gcr.io/cloud-builders/gcloud'
   entrypoint: 'bash'
   args:
     - '-c'
     - |
-      cp ../config.py config.py
-      cp ../requirements.txt requirements.txt
-      for pr in $(python3 ../scripts/listprojects.py ../config/projects.json)
+      cp ../../config.py config.py
+      cp ../../requirements.txt requirements.txt
+      for pr in $(python3 ../../scripts/listprojects.py ../../config/projects.json)
       do
         gcloud builds submit --substitutions=_BUCKET_NAME="${PROJECT_ID}-${pr}-backup-stg",_PROJECT_NAME=${pr} .
       done
