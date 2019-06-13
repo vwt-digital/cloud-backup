@@ -19,16 +19,16 @@ steps:
     gcloud builds submit --substitutions=_TARGET_PROJECT_ID=${_PROJECT_SOURCE},_TOPIC_NAME=${_TOPIC_NAME} .
   dir: 'functions/pub_sub_relay'
 
-- name: 'gcr.io/cloud-builders/gcloud'
-  args:
-  - 'scheduler'
-  - 'jobs'
-  - 'create'
-  - 'pubsub'
-  - 'automated_back_up_job'
-  - '--schedule=0 4 * * *'
-  - '--topic=${_TOPIC_NAME}'
-  - '--message-body={ "data": "test"}'
+#- name: 'gcr.io/cloud-builders/gcloud'
+#  args:
+#  - 'scheduler'
+#  - 'jobs'
+#  - 'create'
+#  - 'pubsub'
+#  - 'automated_back_up_job'
+#  - '--schedule=0 4 * * *'
+#  - '--topic=${_TOPIC_NAME}'
+#  - '--message-body={ "data": "test"}'
 
 - name: 'gcr.io/cloud-builders/gcloud'
   entrypoint: 'bash'
