@@ -27,7 +27,7 @@ steps:
 
 - name: 'gcr.io/cloud-builders/gcloud'
   args:
-- 'beta'
+  - 'beta'
   - 'scheduler'
   - 'jobs'
   - 'create'
