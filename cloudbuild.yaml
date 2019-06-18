@@ -1,4 +1,4 @@
-timeout: 1800s
+timeout: 3600s
 steps:
 - name: 'gcr.io/cloud-builders/gcloud'
   entrypoint: 'bash'
