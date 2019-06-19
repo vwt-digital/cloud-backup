@@ -2,8 +2,8 @@ import json
 import sys
 
 
-if len(sys.argv) >= 1:
-    back_up_topic = open(sys.argv[1])
+if len(sys.argv) > 1:
+    back_up_topic = sys.argv[1]
     result = {
         'bindings': [
             {
@@ -16,3 +16,4 @@ if len(sys.argv) >= 1:
     result['bindings'][0]['members'].append('serviceAccount:{}@appspot.gserviceaccount.com'.format(back_up_topic))
 
     print(json.dumps(result))
+
