@@ -1,0 +1,58 @@
+timeout: 3600s
+steps:
+- name: 'gcr.io/cloud-builders/gcloud'
+  entrypoint: 'bash'
+  args:
+  - '-c'
+  - |
+    for pr in $(python3 scripts/listprojects.py config/projects.json)
+    do
+      gsutil mb -c regional -l europe-west1 gs://${PROJECT_ID}-${pr}-backup-stg/
+      gsutil iam ch serviceAccount:${pr}@appspot.gserviceaccount.com:roles/storage.legacyBucketWriter gs://${PROJECT_ID}-${pr}-backup-stg/
+    done
+
+- name: 'gcr.io/cloud-builders/gcloud'
+  entrypoint: 'bash'
+  args:
+  - '-c'
+  - |
+    curl https://vwt-digital.github.io/project-company-data.github.io/gcp-templates/deploy_data_catalog.sh | bash /dev/stdin $PROJECT_ID-dcat-deploy config/${PROJECT_ID}/data_catalog.json $PROJECT_ID
+
+- name: 'gcr.io/cloud-builders/gcloud'
+  entrypoint: 'bash'
+  args:
+  - '-c'
+  - |
+    gcloud builds submit --substitutions=_TARGET_PROJECT_ID=${_PROJECT_SOURCE},_TOPIC_NAME=${_TOPIC_NAME} .
+  dir: 'functions/pub_sub_relay'
+
+- name: 'gcr.io/cloud-builders/gcloud'
+  entrypoint: 'bash'
+  args:
+  - '-c'
+  - 'gcloud beta scheduler jobs delete --quiet automated_back_up_job || exit 0'
+
+- name: 'gcr.io/cloud-builders/gcloud'
+  args:
+  - 'beta'
+  - 'scheduler'
+  - 'jobs'
+  - 'create'
+  - 'pubsub'
+  - 'automated_back_up_job'
+  - '--schedule=0 4 * * 1-5'
+  - '--topic=${_TOPIC_NAME}'
+  - '--message-body={ "data": "test"}'
+
+- name: 'gcr.io/cloud-builders/gcloud'
+  entrypoint: 'bash'
+  args:
+    - '-c'
+    - |
+      cp ../../config.py config.py
+      cp ../../requirements.txt requirements.txt
+      for pr in $(python3 ../../scripts/listprojects.py ../../config/projects.json)
+      do
+        gcloud builds submit --substitutions=_BUCKET_NAME="${PROJECT_ID}-${pr}-backup-stg",_PROJECT_NAME=${pr} .
+      done
+  dir: 'functions/test_git_backup'

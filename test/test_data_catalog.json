@@ -1,0 +1,77 @@
+{
+  "conformsTo": "Lorem Ipsum",
+  "dataset": [
+    {
+      "identifier": "identifier",
+      "title": "Lorem Ipsum",
+      "accessLevel": "public",
+      "rights": "Lorem Ipsum",
+      "publisher": {
+        "name": "Lorem Ipsum",
+        "subOrganizationOf": {
+          "name": "Lorem Ipsum"
+        }
+      },
+      "keyword": [],
+      "modified": "20/5",
+      "spatial": "Lorem Ipsum",
+      "distribution": [
+        {
+          "accessURL": "https://not_a_git_url.com/not_a_git_link",
+          "mediaType": "application/json",
+          "format": "topic",
+          "title": "Not git",
+          "description": "Lorem Ipsum"
+        }
+      ]
+    },
+    {
+      "identifier": "restingest",
+      "title": "Source of restingest",
+      "accessLevel": "public",
+      "rights": "lorem ipsum",
+      "publisher": {
+        "name": "Lorem Ipsum",
+        "subOrganizationOf": {
+          "name": "Lorem Ipsum"
+        }
+      },
+      "keyword": [],
+      "issued": "2019-05",
+      "distribution": [
+        {
+          "accessURL": "https://github.com/vwt-digital/restingest",
+          "downloadURL": "https://github.com/vwt-digital/restingest.git",
+          "mediaType": "application/json",
+          "format": "gitrepo",
+          "title": "vwt-digital/restingest",
+          "description": "Lorem Ipsum"
+        }
+      ]
+    },
+    {
+      "identifier": "carpublish",
+      "title": "Source of carpublish repo",
+      "accessLevel": "public",
+      "rights": "Lorem ipsum",
+      "publisher": {
+        "name": "Lorem Ipsum",
+        "subOrganizationOf": {
+          "name": "Lorem Ipsum"
+        }
+      },
+      "keyword": [],
+      "issued": "2019-05",
+      "distribution": [
+        {
+          "accessURL": "https://github.com/vwt-digital/carpublish",
+          "downloadURL": "https://github.com/vwt-digital/carpublish.git",
+          "mediaType": "application/json",
+          "format": "gitrepo",
+          "title": "vwt-digital/carpublish",
+          "description": "Lorem Ipsum"
+        }
+      ]
+    }
+  ]
+}

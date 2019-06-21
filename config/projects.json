@@ -1,0 +1,70 @@
+{
+    "projects": [
+        {
+            "projectId": "my-gcp-project",
+            "triggers": [
+                {
+                    "triggerTemplate": {
+                        "repoName": "github_my-github_my-gcp-project-repo",
+                        "branchName": "master"
+                    },
+                    "filename": "cloudbuild.yaml"
+                },
+                {
+                    "triggerTemplate": {
+                        "repoName": "github_otherguy_some-3rd-party-repo",
+                        "branchName": "master"
+                    },
+                    "runTrigger": {
+                        "repoName": "github_my-github_my-gcp-project-repo",
+                        "branchName": "master"
+                    }
+                }
+            ],
+            "services": [
+                "cloudbuild.googleapis.com",
+                "pubsub.googleapis.com",
+                "cloudfunctions.googleapis.com"
+            ],
+            "keyrings": [
+                {
+                    "name": "my-keyring",
+                    "region": "europe-west1",
+                    "keys": [
+                        {
+                            "name": "my-key",
+                            "purpose": "ENCRYPT_DECRYPT"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "projectId": "my-second-gcp-project",
+            "triggers": [
+                {
+                    "triggerTemplate": {
+                        "repoName": "github_my-github_my-gcp-project-repo",
+                        "branchName": "master"
+                    },
+                    "filename": "cloudbuild.yaml"
+                }
+            ],
+            "services": [
+                "cloudbuild.googleapis.com"
+            ]
+        },
+        {
+            "projectId": "my-third-gcp-project",
+            "triggers": [
+                {
+                    "triggerTemplate": {
+                        "repoName": "github_my-github_my-gcp-project-repo",
+                        "branchName": "master"
+                    },
+                    "filename": "cloudbuild.yaml"
+                }
+            ]
+        }
+    ]
+}
