@@ -22,7 +22,7 @@ steps:
   args:
   - '-c'
   - |
-    gcloud builds submit --project=${_BACK_UP_PROJECT} --substitutions=$(../config/backup.config.sh),_PROJECT_SOURCE=${PROJECT_ID} .
+    gcloud builds submit --project=${_BACK_UP_PROJECT} --substitutions=_TOPIC_NAME=${_TOPIC_NAME},_PROJECT_SOURCE=${PROJECT_ID} .
   dir: 'functions/backup-build'
 
 - name: 'gcr.io/cloud-builders/gcloud'
