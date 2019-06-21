@@ -1,13 +1,5 @@
 timeout: 3600s
 steps:
-- name: 'ubuntu'
-  args:
-  - 'bash'
-  - '-c'
-  - |
-    mkdir config/${_BACK_UP_PROJECT}
-    cp ../config/${_BACK_UP_PROJECT}/data_catalog.json config/${_BACK_UP_PROJECT}/data_catalog.json
-
 - name: 'gcr.io/cloud-builders/gcloud'
   entrypoint: 'bash'
   args:
