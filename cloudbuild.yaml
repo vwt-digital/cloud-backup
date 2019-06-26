@@ -10,14 +10,12 @@ steps:
       gsutil mb -c regional -l europe-west1 gs://${PROJECT_ID}-${pr}-backup-stg/
       gsutil iam ch serviceAccount:${pr}@appspot.gserviceaccount.com:roles/storage.legacyBucketWriter gs://${PROJECT_ID}-${pr}-backup-stg/
     done
-
 - name: 'gcr.io/cloud-builders/gcloud'
   entrypoint: 'bash'
   args:
   - '-c'
   - |
     curl https://vwt-digital.github.io/project-company-data.github.io/gcp-templates/deploy_data_catalog.sh | bash /dev/stdin $PROJECT_ID-dcat-deploy config/${PROJECT_ID}/data_catalog.json $PROJECT_ID
-
 - name: 'gcr.io/cloud-builders/gcloud'
   entrypoint: 'bash'
   args:
