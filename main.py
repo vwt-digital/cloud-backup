@@ -71,6 +71,10 @@ def get_project_name_from_git_url(url):
 
 
 def dump_repo(repo_url):
+    if get_project_name_from_git_url(repo_url) == 'odoo.git':
+        logging.info('Skipping repo {} as it is too big'.format(get_project_name_from_git_url(repo_url)))
+        return ''
+
     tmpdir = tempfile.mkdtemp()
     temp_repo_path = os.path.join(tmpdir, get_project_name_from_git_url(repo_url))
     tar_name = temp_repo_path + ".tar.bz2"
