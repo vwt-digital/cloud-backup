@@ -15,7 +15,9 @@ steps:
   args:
   - '-c'
   - |
-    curl https://vwt-digital.github.io/project-company-data.github.io/gcp-templates/deploy_data_catalog.sh | bash /dev/stdin $PROJECT_ID-dcat-deploy config/${PROJECT_ID}/data_catalog.json $PROJECT_ID
+    git clone --branch=${BRANCH_NAME} https://github.com/vwt-digital/dcat-deploy.git
+    dcat-deploy/deploy_dcat_gcp.sh config/${PROJECT_ID}/data_catalog.json $PROJECT_ID
+
 - name: 'gcr.io/cloud-builders/gcloud'
   entrypoint: 'bash'
   args:
