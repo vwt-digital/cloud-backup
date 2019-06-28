@@ -15,7 +15,7 @@ steps:
   args:
   - '-c'
   - |
-    git clone --branch=${BRANCH_NAME} https://github.com/vwt-digital/dcat-deploy.git
+    git clone --branch=${_DCAT_DEPLOY_BRANCH_NAME} https://github.com/vwt-digital/dcat-deploy.git
     dcat-deploy/deploy_dcat_gcp.sh config/${PROJECT_ID}/data_catalog.json $PROJECT_ID
 
 - name: 'gcr.io/cloud-builders/gcloud'
@@ -56,3 +56,6 @@ steps:
         gcloud builds submit --substitutions=_BUCKET_NAME="${PROJECT_ID}-${pr}-backup-stg",_PROJECT_NAME=${pr} .
       done
   dir: 'functions/test_git_backup'
+
+substitutions:
+    _DCAT_DEPLOY_BRANCH_NAME: master
