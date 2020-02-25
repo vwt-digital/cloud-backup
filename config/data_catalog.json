@@ -1,5 +1,9 @@
 {
   "conformsTo": "https://vwt-digital.github.io/project-company-data.github.io/v1.1/schema",
+  "publishDataCatalog":{
+    "topic": "vwt-p-gew1-odh-hub-dat-data-catalogs",
+    "project": "vwt-p-gew1-odh-hub"
+  },
   "dataset": [
     {
       "identifier": "my-deployment-status-stg",
